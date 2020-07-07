@@ -1,8 +1,28 @@
 from __future__ import unicode_literals
 
+import utils.logging as logging
+
 from django.template.defaultfilters import slugify as django_slugify
 from importlib import import_module
 from unidecode import unidecode
+
+logger = logging.getLogger(__name__)
+
+
+def copy_form(form, name):
+    """ Creates a deep copy of form and fields """
+    fields = form.fields.all()
+    new_form = form
+    new_form.pk = None
+    new_form.title = name
+    new_form.slug = slugify(new_form.title)
+    new_form.save()
+    for field in fields:
+        new_field = field
+        new_field.pk = None
+        new_field.form = new_form
+        new_field.save()
+    return new_form
 
 
 # Timezone support with fallback.
