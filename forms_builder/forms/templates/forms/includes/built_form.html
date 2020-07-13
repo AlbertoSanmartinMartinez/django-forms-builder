@@ -1,4 +1,5 @@
-    <h1>{{ form.title }}</h1>
+{% load form_tags %}
+{% load core_tags %}
     {% if form.intro %}
     <p>{{ form.intro }}</p>
     {% endif %}
@@ -6,7 +7,23 @@
     <form action="{{ form.get_absolute_url }}" method="post"
         {% if form_for_form.is_multipart %}enctype="multipart/form-data"{% endif %}>
         {% csrf_token %}
-        {{ form_for_form.as_p }}
+        {% for key, field_or_group in form_for_form.iter_field_or_group %}
+        {% if key == 'field' %}
+
+        {% render_field field_or_group %}
+
+        {% else %}
+
+        {% render_field_group field_or_group %}
+
+        {% endif %}
+        {% endfor %}
         <div style="clear:left;">&nbsp;</div>
-        <input type="submit" value="{{ form.button_text }}">
+        {% if user.is_staff or user|is_lecturer:service %}
+        <p>Staff and lecturers should not fill out feedback form.</p>
+        <input type="submit" value="{{ form.button_text }}" class="button
+        is-primary" disabled>
+        {% else %}
+        <input type="submit" value="{{ form.button_text }}" class="button is-primary">
+        {% endif %}
     </form>

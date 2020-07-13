@@ -12,7 +12,7 @@ if not ("django.contrib.sites" in settings.INSTALLED_APPS):
 FIELD_MAX_LENGTH = getattr(settings, "FORMS_BUILDER_FIELD_MAX_LENGTH", 2000)
 
 # The maximum allowed length for field labels.
-LABEL_MAX_LENGTH = getattr(settings, "FORMS_BUILDER_LABEL_MAX_LENGTH", 200)
+LABEL_MAX_LENGTH = getattr(settings, "FORMS_BUILDER_LABEL_MAX_LENGTH", 300)
 
 # Sequence of custom fields that will be added to the form field types.
 EXTRA_FIELDS = getattr(settings, "FORMS_BUILDER_EXTRA_FIELDS", ())
@@ -43,7 +43,7 @@ CHOICES_UNQUOTE = getattr(settings, "FORMS_BUILDER_CHOICES_UNQUOTE", "`")
 CSV_DELIMITER = getattr(settings, "FORMS_BUILDER_CSV_DELIMITER", ",")
 
 # The maximum allowed length for field help text
-HELPTEXT_MAX_LENGTH = getattr(settings, "FORMS_BUILDER_HELPTEXT_MAX_LENGTH", 100)
+HELPTEXT_MAX_LENGTH = getattr(settings, "FORMS_BUILDER_HELPTEXT_MAX_LENGTH", 300)
 
 # The maximum allowed length for field choices
 CHOICES_MAX_LENGTH = getattr(settings, "FORMS_BUILDER_CHOICES_MAX_LENGTH", 1000)

@@ -62,9 +62,9 @@ class AbstractForm(models.Model):
 
     sites = models.ManyToManyField(Site,
         default=[settings.SITE_ID], related_name="%(app_label)s_%(class)s_forms")
-    title = models.CharField(_("Title"), max_length=50)
+    title = models.CharField(_("Title"), max_length=220)
     slug = models.SlugField(_("Slug"), editable=settings.EDITABLE_SLUGS,
-        max_length=100, unique=True)
+        max_length=220, unique=True)
     intro = models.TextField(_("Intro"), blank=True)
     button_text = models.CharField(_("Button text"), max_length=50,
         default=_("Submit"))
@@ -82,7 +82,7 @@ class AbstractForm(models.Model):
         blank=True, null=True)
     login_required = models.BooleanField(_("Login required"), default=False,
         help_text=_("If checked, only logged in users can view the form"))
-    send_email = models.BooleanField(_("Send email"), default=True, help_text=
+    send_email = models.BooleanField(_("Send email"), default=False, help_text=
         _("If checked, the person entering the form will be sent an email"))
     email_from = models.EmailField(_("From address"), blank=True,
         help_text=_("The address the email will be sent from"))
@@ -140,17 +140,20 @@ class AbstractForm(models.Model):
     total_entries.admin_order_field = "total_entries"
 
     def get_absolute_url(self):
+        from django.urls import reverse
         return reverse("form_detail", kwargs={"slug": self.slug})
 
     def admin_links(self):
-        kw = {"args": (self.id, )}
-
-        return format_html_join("\n", "<div><a href='{1}'>{0}</a></div>", (
+        kw = {"args": (self.id,)}
+        links = [
             (_("View form on site"), self.get_absolute_url()),
             (_("Filter entries"), reverse("admin:form_entries", **kw)),
             (_("View all entries"), reverse("admin:form_entries_show", **kw)),
             (_("Export all entries"), reverse("admin:form_entries_export", **kw)),
-        ))
+        ]
+        for i, (text, url) in enumerate(links):
+            links[i] = "<a href='%s'>%s</a>" % (url, ugettext(text))
+        return "<br>".join(links)
     admin_links.allow_tags = True
     admin_links.short_description = ""
 
@@ -170,7 +173,7 @@ class AbstractField(models.Model):
     """
 
     label = models.CharField(_("Label"), max_length=settings.LABEL_MAX_LENGTH)
-    slug = models.SlugField(_('Slug'), max_length=2000, blank=True,
+    slug = models.SlugField(_('Slug'), max_length=settings.LABEL_MAX_LENGTH, blank=True,
             default="")
     field_type = models.IntegerField(_("Type"), choices=fields.NAMES)
     required = models.BooleanField(_("Required"), default=True)
@@ -220,6 +223,12 @@ class AbstractField(models.Model):
         if choice:
             yield choice, choice
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            slug = slugify(self).replace('-', '_')
+            self.slug = unique_slug(self.form.fields, "slug", slug)
+        return super(AbstractField, self).save(*args, **kwargs)
+
     def is_a(self, *args):
         """
         Helper that returns True if the field's type is given in any arg.
@@ -262,11 +271,15 @@ class AbstractFieldEntry(models.Model):
 ###################################################
 
 class FormEntry(AbstractFormEntry):
-    form = models.ForeignKey("Form", related_name="entries", on_delete=models.CASCADE)
+    form = models.ForeignKey("Form", 
+                             on_delete=models.CASCADE,
+                             related_name="entries")
 
 
 class FieldEntry(AbstractFieldEntry):
-    entry = models.ForeignKey("FormEntry", related_name="fields", on_delete=models.CASCADE)
+    entry = models.ForeignKey("FormEntry", 
+                              on_delete=models.CASCADE,
+                              related_name="fields")
 
 
 class Form(AbstractForm):
@@ -278,7 +291,7 @@ class Field(AbstractField):
     Implements automated field ordering.
     """
 
-    form = models.ForeignKey("Form", related_name="fields", on_delete=models.CASCADE)
+    form = models.ForeignKey("Form", on_delete=models.CASCADE, related_name="fields")
     order = models.IntegerField(_("Order"), null=True, blank=True)
 
     class Meta(AbstractField.Meta):

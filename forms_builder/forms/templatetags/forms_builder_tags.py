@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+import utils.logging as logging
 from future.builtins import str
 
 from django import template
@@ -7,6 +8,7 @@ from django.template.loader import get_template
 from forms_builder.forms.forms import FormForForm
 from forms_builder.forms.models import Form, AbstractForm
 
+logger = logging.getLogger(__name__)
 
 register = template.Library()
 
@@ -34,10 +36,12 @@ class BuiltFormNode(template.Node):
                 or not form.published(for_user=user)):
             return ""
         t = get_template("forms/includes/built_form.html")
-        context["form"] = form
+        
+        template_context = {}
+        template_context["form"] = form
         form_args = (form, context, post or None, files or None)
-        context["form_for_form"] = FormForForm(*form_args)
-        return t.render(context.flatten())
+        template_context["form_for_form"] = FormForForm(*form_args)
+        return t.render(template_context, request)
 
 
 @register.tag

@@ -6,6 +6,7 @@ from django.template.defaultfilters import slugify as django_slugify
 from importlib import import_module
 from unidecode import unidecode
 
+
 logger = logging.getLogger(__name__)
 
 

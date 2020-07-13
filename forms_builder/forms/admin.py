@@ -73,6 +73,18 @@ class FormAdmin(admin.ModelAdmin):
                      "email_copies")
     radio_fields = {"status": admin.HORIZONTAL}
     fieldsets = form_admin_fieldsets
+    actions = ['copy_form',]
+
+    def copy_form(self, request, queryset):
+        from .utils import copy_form
+        if queryset.count() > 1:
+            msg = "Please only copy one form at a time"
+        else:
+            form = queryset.first()
+            new_form = copy_form(form, form.title + ' copy')
+            msg = "Successfully copied form"
+        self.message_user(request, msg)
+    copy_form.short_description = 'Copy form'
 
     def get_queryset(self, request):
         """
