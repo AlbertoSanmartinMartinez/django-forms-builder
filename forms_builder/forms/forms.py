@@ -265,6 +265,28 @@ class FormForForm(forms.ModelForm):
                 return self.cleaned_data[field.slug]
         return None
 
+    def iter_field_or_group(self):
+        """
+        Iterates over all the fields in the form and returns either sections
+        (radio button fields marked with GROUP in placeholder) or individual
+        fields.
+        """
+        def placeholder(field):
+            try:
+                return field.field.widget.attrs['placeholder'].lower()
+            except:
+                return ''
+
+        fields = [field for field in self]
+        group = []
+        for i, field in enumerate(fields):
+            if placeholder(field).startswith('group'):
+                group.append(field)
+                if not placeholder(fields[i+1]) == placeholder(field):
+                    yield (placeholder(field), group)
+                    group = []
+            else:
+                yield ('field', field)
 
 class EntriesForm(forms.Form):
     """
