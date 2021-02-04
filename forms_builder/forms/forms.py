@@ -278,12 +278,17 @@ class FormForForm(forms.ModelForm):
                 return ''
 
         fields = [field for field in self]
+        fields_count = len(fields)
         group = []
-        for i, field in enumerate(fields):
+        for idx, field in enumerate(fields):
             if placeholder(field).startswith('group'):
                 group.append(field)
-                if not placeholder(fields[i+1]) == placeholder(field):
-                    yield (placeholder(field), group)
+                next_exists = idx + 1 < fields_count
+                yield (placeholder(field), group)
+                if (
+                    next_exists and
+                    not placeholder(fields[idx+1]) == placeholder(field)
+                ):
                     group = []
             else:
                 yield ('field', field)
