@@ -283,15 +283,15 @@ class FormForForm(forms.ModelForm):
         for idx, field in enumerate(fields):
             if placeholder(field).startswith('group'):
                 group.append(field)
-                next_exists = idx + 1 < fields_count
-                yield (placeholder(field), group)
                 if (
-                    next_exists and
-                    not placeholder(fields[idx+1]) == placeholder(field)
+                        idx + 1 == fields_count or
+                        not placeholder(fields[idx+1]) == placeholder(field)
                 ):
+                    yield (placeholder(field), group)
                     group = []
             else:
                 yield ('field', field)
+
 
 class EntriesForm(forms.Form):
     """
