@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 import utils.logging as logging
 logger = logging.getLogger(__name__)
 
+from django import VERSION as DJANGO_VERSION
 from django.dispatch import Signal
 from django.contrib.contenttypes.models import ContentType
 from django.dispatch import receiver
@@ -14,8 +15,12 @@ from online_fellowships.models import SelfManagedModule, MentoredModule
 
 from services.utils import get_student_registration
 
-form_invalid = Signal(providing_args=["form"])
-form_valid = Signal(providing_args=["form", "entry"])
+if DJANGO_VERSION < (3, 1, 0):
+    form_invalid = Signal(providing_args=["form"])
+    form_valid = Signal(providing_args=["form", "entry"])
+else:
+    form_invalid = Signal()
+    form_valid = Signal()
 
 
 @receiver(form_valid)
