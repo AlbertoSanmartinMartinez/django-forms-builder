@@ -4,9 +4,9 @@ import utils.logging as logging
 
 from django.template.defaultfilters import slugify as django_slugify
 from django.http.request import HttpRequest
+from django.utils.timezone import now
 from importlib import import_module
 from unidecode import unidecode
-
 
 
 logger = logging.getLogger(__name__)
@@ -26,14 +26,6 @@ def copy_form(form, name):
         new_field.form = new_form
         new_field.save()
     return new_form
-
-
-# Timezone support with fallback.
-try:
-    from django.utils.timezone import now
-except ImportError:
-    from datetime import datetime
-    now = datetime.now
 
 
 def slugify(s):
