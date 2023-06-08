@@ -1,12 +1,12 @@
 from __future__ import unicode_literals
 
+from six import python_2_unicode_compatible
 from django.contrib.sites.models import Site
 from django.utils.html import format_html_join
 from django.urls import reverse
 
 from django.db import models
 from django.db.models import Q
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import gettext, gettext_lazy as _
 from future.builtins import str
 
