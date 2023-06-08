@@ -3,8 +3,10 @@ from __future__ import unicode_literals
 import utils.logging as logging
 
 from django.template.defaultfilters import slugify as django_slugify
+from django.http.request import HttpRequest
 from importlib import import_module
 from unidecode import unidecode
+
 
 
 logger = logging.getLogger(__name__)
@@ -86,3 +88,7 @@ def import_attr(path):
     """
     module_path, attr_name = path.rsplit(".", 1)
     return getattr(import_module(module_path), attr_name)
+
+
+def is_ajax(request: HttpRequest) -> bool:
+    return request.headers.get('x-requested-with') == 'XMLHttpRequest'

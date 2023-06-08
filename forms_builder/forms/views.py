@@ -20,7 +20,7 @@ from forms_builder.forms.forms import FormForForm
 from forms_builder.forms.models import Form
 from forms_builder.forms.settings import EMAIL_FAIL_SILENTLY
 from forms_builder.forms.signals import form_invalid, form_valid
-from forms_builder.forms.utils import split_choices
+from forms_builder.forms.utils import split_choices, is_ajax
 
 
 class FormDetail(TemplateView):
@@ -60,14 +60,15 @@ class FormDetail(TemplateView):
             entry = form_for_form.save()
             form_valid.send(sender=request, form=form_for_form, entry=entry)
             self.send_emails(request, form_for_form, form, entry, attachments)
-            if not self.request.is_ajax():
-                return redirect(form.redirect_url or
+            if not is_ajax():
+                return redirect(
+                    form.redirect_url or
                     reverse("form_sent", kwargs={"slug": form.slug}))
         context = {"form": form, "form_for_form": form_for_form}
         return self.render_to_response(context)
 
     def render_to_response(self, context, **kwargs):
-        if self.request.method == "POST" and self.request.is_ajax():
+        if self.request.method == "POST" and is_ajax():
             json_context = json.dumps({
                 "errors": context["form_for_form"].errors,
                 "form": context["form_for_form"].as_p(),
