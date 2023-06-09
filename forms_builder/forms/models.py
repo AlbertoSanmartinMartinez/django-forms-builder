@@ -54,37 +54,86 @@ class AbstractForm(models.Model):
     A user-built form.
     """
 
-    sites = models.ManyToManyField(Site,
-        default=[settings.SITE_ID], related_name="%(app_label)s_%(class)s_forms")
-    title = models.CharField(_("Title"), max_length=220)
-    slug = models.SlugField(_("Slug"), editable=settings.EDITABLE_SLUGS,
-        max_length=220, unique=True)
-    intro = models.TextField(_("Intro"), blank=True)
-    button_text = models.CharField(_("Button text"), max_length=50,
-        default=_("Submit"))
-    response = models.TextField(_("Response"), blank=True)
-    redirect_url = models.CharField(_("Redirect url"), max_length=200,
+    sites = models.ManyToManyField(
+        Site,
+        default=[settings.SITE_ID], 
+        related_name="%(app_label)s_%(class)s_forms"
+    )
+    title = models.CharField(
+        _("Title"), 
+        max_length=220
+    )
+    slug = models.SlugField(
+        _("Slug"), 
+        editable=settings.EDITABLE_SLUGS,
+        max_length=220, 
+        unique=True
+    )
+    intro = models.TextField(
+        _("Intro"), 
+        blank=True
+    )
+    button_text = models.CharField(
+        _("Button text"), 
+        max_length=50,
+        default=_("Submit")
+    )
+    response = models.TextField(
+        _("Response"), 
+        blank=True
+    )
+    redirect_url = models.CharField(
+        _("Redirect url"), 
+        max_length=200,
         null=True, blank=True,
-        help_text=_("An alternate URL to redirect to after form submission"))
-    status = models.IntegerField(_("Status"), choices=STATUS_CHOICES,
-        default=STATUS_PUBLISHED)
-    publish_date = models.DateTimeField(_("Published from"),
+        help_text=_("An alternate URL to redirect to after form submission")
+    )
+    status = models.IntegerField(
+        _("Status"), 
+        choices=STATUS_CHOICES,
+        default=STATUS_PUBLISHED
+    )
+    publish_date = models.DateTimeField(
+        _("Published from"),
         help_text=_("With published selected, won't be shown until this time"),
-        blank=True, null=True)
-    expiry_date = models.DateTimeField(_("Expires on"),
+        blank=True, 
+        null=True
+    )
+    expiry_date = models.DateTimeField(
+        _("Expires on"),
         help_text=_("With published selected, won't be shown after this time"),
-        blank=True, null=True)
-    login_required = models.BooleanField(_("Login required"), default=False,
-        help_text=_("If checked, only logged in users can view the form"))
-    send_email = models.BooleanField(_("Send email"), default=False, help_text=
-        _("If checked, the person entering the form will be sent an email"))
-    email_from = models.EmailField(_("From address"), blank=True,
-        help_text=_("The address the email will be sent from"))
-    email_copies = models.CharField(_("Send copies to"), blank=True,
+        blank=True, null=True
+    )
+    login_required = models.BooleanField(
+        _("Login required"), 
+        default=False,
+        help_text=_("If checked, only logged in users can view the form")
+    )
+    send_email = models.BooleanField(
+        _("Send email"), 
+        default=False, 
+        help_text=_("If checked, the person entering the form will be sent an email")
+    )
+    email_from = models.EmailField(
+        _("From address"), 
+        blank=True,
+        help_text=_("The address the email will be sent from")
+    )
+    email_copies = models.CharField(
+        _("Send copies to"), 
+        blank=True,
         help_text=_("One or more email addresses, separated by commas"),
-        max_length=200)
-    email_subject = models.CharField(_("Subject"), max_length=200, blank=True)
-    email_message = models.TextField(_("Message"), blank=True)
+        max_length=200
+    )
+    email_subject = models.CharField(
+        _("Subject"), 
+        max_length=200, 
+        blank=True
+    )
+    email_message = models.TextField(
+        _("Message"), 
+        blank=True
+    )
 
     objects = FormManager()
 
@@ -163,22 +212,54 @@ class AbstractField(models.Model):
     A field for a user-built form.
     """
 
-    label = models.CharField(_("Label"), max_length=settings.LABEL_MAX_LENGTH)
-    slug = models.SlugField(_('Slug'), max_length=settings.LABEL_MAX_LENGTH, blank=True,
-            default="")
-    field_type = models.IntegerField(_("Type"), choices=fields.NAMES)
-    required = models.BooleanField(_("Required"), default=True)
-    visible = models.BooleanField(_("Visible"), default=True)
-    choices = models.CharField(_("Choices"), max_length=settings.CHOICES_MAX_LENGTH, blank=True,
+    label = models.CharField(
+        _("Label"), 
+        max_length=settings.LABEL_MAX_LENGTH
+    )
+    slug = models.SlugField(
+        _('Slug'), 
+        max_length=settings.LABEL_MAX_LENGTH, 
+        blank=True,
+        default=""
+    )
+    field_type = models.IntegerField(
+        _("Type"), 
+        choices=fields.NAMES
+    )
+    required = models.BooleanField(
+        _("Required"), 
+        default=True
+    )
+    visible = models.BooleanField(
+        _("Visible"), 
+        default=True
+    )
+    choices = models.CharField(
+        _("Choices"), 
+        max_length=settings.CHOICES_MAX_LENGTH, 
+        blank=True,
         help_text="Comma separated options where applicable. If an option "
-            "itself contains commas, surround the option starting with the %s"
-            "character and ending with the %s character." %
-                (settings.CHOICES_QUOTE, settings.CHOICES_UNQUOTE))
-    default = models.CharField(_("Default value"), blank=True,
-        max_length=settings.FIELD_MAX_LENGTH)
-    placeholder_text = models.CharField(_("Placeholder Text"), null=True,
-        blank=True, max_length=100, editable=settings.USE_HTML5)
-    help_text = models.CharField(_("Help text"), blank=True, max_length=settings.HELPTEXT_MAX_LENGTH)
+        "itself contains commas, surround the option starting with the %s"
+        "character and ending with the %s character." %
+        (settings.CHOICES_QUOTE, settings.CHOICES_UNQUOTE)
+    )
+    default = models.CharField(
+        _("Default value"), 
+        blank=True,
+        max_length=settings.FIELD_MAX_LENGTH
+    )
+    placeholder_text = models.CharField(
+        _("Placeholder Text"), 
+        null=True,
+        blank=True, 
+        max_length=100, 
+        editable=settings.USE_HTML5
+    )
+    help_text = models.CharField(
+        _("Help text"), 
+        blank=True, 
+        max_length=settings.HELPTEXT_MAX_LENGTH
+    )
 
     objects = FieldManager()
 
@@ -246,8 +327,10 @@ class AbstractFieldEntry(models.Model):
     """
 
     field_id = models.IntegerField()
-    value = models.CharField(max_length=settings.FIELD_MAX_LENGTH,
-            null=True)
+    value = models.CharField(
+        max_length=settings.FIELD_MAX_LENGTH,
+        null=True
+    )
 
     class Meta:
         verbose_name = _("Form field entry")
@@ -262,15 +345,19 @@ class AbstractFieldEntry(models.Model):
 ###################################################
 
 class FormEntry(AbstractFormEntry):
-    form = models.ForeignKey("Form", 
-                             on_delete=models.CASCADE,
-                             related_name="entries")
+    form = models.ForeignKey(
+        "Form", 
+        on_delete=models.CASCADE,
+        related_name="entries"
+    )
 
 
 class FieldEntry(AbstractFieldEntry):
-    entry = models.ForeignKey("FormEntry", 
-                              on_delete=models.CASCADE,
-                              related_name="fields")
+    entry = models.ForeignKey(
+        "FormEntry", 
+        on_delete=models.CASCADE,
+        related_name="fields"
+    )
 
 
 class Form(AbstractForm):
@@ -282,8 +369,16 @@ class Field(AbstractField):
     Implements automated field ordering.
     """
 
-    form = models.ForeignKey("Form", on_delete=models.CASCADE, related_name="fields")
-    order = models.IntegerField(_("Order"), null=True, blank=True)
+    form = models.ForeignKey(
+        "Form", 
+        on_delete=models.CASCADE, 
+        related_name="fields"
+    )
+    order = models.IntegerField(
+        _("Order"), 
+        null=True, 
+        blank=True
+    )
 
     class Meta(AbstractField.Meta):
         ordering = ("order",)
