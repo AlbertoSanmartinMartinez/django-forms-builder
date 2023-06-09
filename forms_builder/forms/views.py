@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import json
+from urllib.parse import quote
 
 from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
@@ -8,15 +9,13 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import RequestContext
-from urllib.parse import quote
 from django.views.generic.base import TemplateView
-from email_extras.utils import send_mail_template
 
 from forms_builder.forms.forms import FormForForm
 from forms_builder.forms.models import Form
 from forms_builder.forms.settings import EMAIL_FAIL_SILENTLY
 from forms_builder.forms.signals import form_invalid, form_valid
-from forms_builder.forms.utils import split_choices, is_ajax
+from forms_builder.forms.utils import split_choices, is_ajax, send_mail_template
 
 
 class FormDetail(TemplateView):
@@ -72,7 +71,7 @@ class FormDetail(TemplateView):
             })
             if context["form_for_form"].errors:
                 return HttpResponseBadRequest(json_context,
-                    content_type="application/json")
+                                              content_type="application/json")
             return HttpResponse(json_context, content_type="application/json")
         return super(FormDetail, self).render_to_response(context, **kwargs)
 

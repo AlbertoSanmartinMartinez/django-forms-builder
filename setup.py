@@ -48,8 +48,7 @@ try:
         packages = find_packages(),
         install_requires = [
             "sphinx-me >= 0.1.2",
-            "unidecode",
-            "django-email-extras >= 0.2",
+            "unidecode",          
             "django >= 2.0, < 4.2.999",
             "future <= 0.18.999",
         ],
