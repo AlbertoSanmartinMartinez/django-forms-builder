@@ -1,6 +1,4 @@
-from __future__ import unicode_literals
 import utils.logging as logging
-from future.builtins import str
 
 from django import template
 from django.template.loader import get_template

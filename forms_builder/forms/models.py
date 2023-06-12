@@ -1,6 +1,3 @@
-from __future__ import unicode_literals
-
-from six import python_2_unicode_compatible
 from django.contrib.sites.models import Site
 from django.utils.html import format_html_join
 from django.urls import reverse
@@ -9,7 +6,6 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext, gettext_lazy as _
 from django.utils.html import format_html
-from future.builtins import str
 
 from forms_builder.forms import fields
 from forms_builder.forms import settings
@@ -49,7 +45,6 @@ class FormManager(models.Manager):
 #                                                                    #
 ######################################################################
 
-@python_2_unicode_compatible
 class AbstractForm(models.Model):
     """
     A user-built form.
@@ -206,7 +201,6 @@ class FieldManager(models.Manager):
         return self.filter(visible=True)
 
 
-@python_2_unicode_compatible
 class AbstractField(models.Model):
     """
     A field for a user-built form.

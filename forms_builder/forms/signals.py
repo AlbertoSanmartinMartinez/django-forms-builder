@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import utils.logging as logging
 logger = logging.getLogger(__name__)
 

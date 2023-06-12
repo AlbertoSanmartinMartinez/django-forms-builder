@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import utils.logging as logging
 from warnings import warn
 from os.path import basename
@@ -36,8 +34,7 @@ def slugify(s):
     """
     Translates unicode into closest possible ascii chars before
     slugifying.
-    """
-    from future.builtins import str
+    """    
     return django_slugify(unidecode(str(s)))
 
 

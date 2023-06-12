@@ -1,6 +1,3 @@
-from __future__ import unicode_literals
-from future.builtins import bytes, open
-
 from csv import writer
 from mimetypes import guess_type
 from os.path import join

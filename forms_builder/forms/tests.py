@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from django.utils.safestring import SafeText
 from django.conf import settings
 from django.contrib.auth.models import User, AnonymousUser
@@ -143,8 +141,7 @@ class Tests(TestCase):
                 field_type=NAMES[0][0], order=1)
         self.assertEqual(form.fields.all()[0], f1)
 
-    def test_form_errors(self):
-        from future.builtins import str
+    def test_form_errors(self):        
         form = Form.objects.create(title="Test")
         if USE_SITES:
             form.sites.add(self._site)
