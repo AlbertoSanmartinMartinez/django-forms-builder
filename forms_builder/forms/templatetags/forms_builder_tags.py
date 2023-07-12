@@ -1,4 +1,4 @@
-import utils.logging as logging
+from _shared.utils.logging import get_logger
 
 from django import template
 from django.template.loader import get_template
@@ -6,7 +6,7 @@ from django.template.loader import get_template
 from forms_builder.forms.forms import FormForForm
 from forms_builder.forms.models import Form, AbstractForm
 
-logger = logging.getLogger(__name__)
+logger = getLogger(__name__)
 
 register = template.Library()
 

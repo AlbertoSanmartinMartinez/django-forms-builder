@@ -1,5 +1,5 @@
-import utils.logging as logging
-logger = logging.getLogger(__name__)
+from _shared.utils.logging import get_logger
+logger = getLogger(__name__)
 
 from datetime import date, datetime
 from os.path import join, split
