@@ -11,7 +11,7 @@ from importlib import import_module
 from unidecode import unidecode
 
 
-logger = getLogger(__name__)
+logger = get_logger(__name__)
 
 
 def copy_form(form, name):
