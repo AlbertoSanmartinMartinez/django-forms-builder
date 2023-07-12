@@ -6,7 +6,7 @@ from django.template.loader import get_template
 from forms_builder.forms.forms import FormForForm
 from forms_builder.forms.models import Form, AbstractForm
 
-logger = getLogger(__name__)
+logger = get_logger(__name__)
 
 register = template.Library()
 
