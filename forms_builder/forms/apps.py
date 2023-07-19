@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
-APP_NAME = "forms"
+APP_NAME = "forms_builder.forms"
 
 
 class ServicesConfig(AppConfig):
