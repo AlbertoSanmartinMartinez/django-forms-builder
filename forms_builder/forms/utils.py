@@ -1,4 +1,4 @@
-import utils.logging as logging
+from _shared.utils.logging import get_logger
 from warnings import warn
 from os.path import basename
 
@@ -11,7 +11,7 @@ from importlib import import_module
 from unidecode import unidecode
 
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 def copy_form(form, name):
